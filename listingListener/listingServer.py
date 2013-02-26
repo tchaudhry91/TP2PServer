@@ -13,7 +13,7 @@ class ListingServerProtocol(basic.LineReceiver):
         self.peer = self.transport.getPeer().host
         print("LISTING SERVER : Got incoming connection from "
                + self.peer)
-        self.transport.write('LISTING SERVER:Connected..')
+        self.sendLine('LISTING SERVER:Connected..')
     
     def connectionLost(self, reason):
         print("LISTING SERVER : Connection Terminated to "
@@ -24,6 +24,7 @@ class ListingServerProtocol(basic.LineReceiver):
     
     def lineReceived(self, line):
         if line.startswith("ListingSendRequest"):
+            print("LISTING SERVER : Got Request from "+self.peer)
             self.setUserAndOpenHandler(line)            
             self.setRawMode()
             self.sendLine("proceed")
@@ -32,7 +33,9 @@ class ListingServerProtocol(basic.LineReceiver):
             self.transport.write("InvalidCommand")
     
     def rawDataReceived(self, data):
-        if data.endswith('/r/n'):
+        print("Retreiving Listing..")
+        print(data)
+        if data.endswith('\r\n'):
             data = data[:-2]
             self.handler.write(data)
             self.handler.close()
@@ -40,11 +43,11 @@ class ListingServerProtocol(basic.LineReceiver):
             self.sendLine("LISTING SERVER : Received Listing")
             self.gotListing = True        
         else:
-            self.handler.write(data)            
+            self.handler.write(data)      
             
     def setUserAndOpenHandler(self, line):
         self.user = line.split(' ')[1]
-        self.handler = open(self.user,'wb')            
+        self.handler = open(self.user+".fls",'wb')            
 
 class ListingServerFactory(protocol.ServerFactory):
     protocol = ListingServerProtocol

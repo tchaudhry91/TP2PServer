@@ -1,5 +1,6 @@
 from twisted.internet import reactor, protocol
 from twisted.protocols import basic
+import os
 
 class ListingServerProtocol(basic.LineReceiver):
     
@@ -47,7 +48,8 @@ class ListingServerProtocol(basic.LineReceiver):
             
     def setUserAndOpenHandler(self, line):
         self.user = line.split(' ')[1]
-        self.handler = open(self.user+".fls",'wb')            
+        self.handler = open(os.path.join
+                            ("Listings",self.user+".fls"),'wb')            
 
 class ListingServerFactory(protocol.ServerFactory):
     protocol = ListingServerProtocol
@@ -59,6 +61,10 @@ class ListingServerFactory(protocol.ServerFactory):
         pass
     
 def startListingServer():
+    if(os.path.isdir('Listings')):
+        pass
+    else:
+        os.mkdir('Listings')
     reactor.listenTCP(9880, ListingServerFactory())
     print("LISTING SERVER STARTED")
     

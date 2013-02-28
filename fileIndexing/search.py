@@ -1,9 +1,10 @@
 import os
 import pickle
-import fl_class
+import fileListing
 
 def search(file_name):
     tup = os.walk(os.path.join(os.getcwd(),'Listings'))
+    tup = tup.next()
     files = tup[2]
     for listing in files:
         fl_class_obj = pickle.load(open(os.path.join(

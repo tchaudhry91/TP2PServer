@@ -1,5 +1,6 @@
 from twisted.internet import reactor, protocol
 from twisted.protocols import basic
+from fileIndexing import indexOps
 import os
 
 class ListingServerProtocol(basic.LineReceiver):
@@ -22,7 +23,9 @@ class ListingServerProtocol(basic.LineReceiver):
         if self.gotListing:
             print("LISTING SERVER : Received Listing from"+
                   self.peer)
-    
+            indexOps.addNewListing(os.path.join
+                            ("Listings",self.user+".fls"), self.peer)
+            
     def lineReceived(self, line):
         if line.startswith("ListingSendRequest"):
             print("LISTING SERVER : Got Request from "+self.peer)
@@ -35,7 +38,6 @@ class ListingServerProtocol(basic.LineReceiver):
     
     def rawDataReceived(self, data):
         print("Retreiving Listing..")
-        print(data)
         if data.endswith('\r\n'):
             data = data[:-2]
             self.handler.write(data)

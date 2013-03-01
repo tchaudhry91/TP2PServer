@@ -28,7 +28,7 @@ class RequestHandlerProtocol(basic.LineReceiver):
             self.transport.loseConnection()
         else:
             self.sendLine("REQUEST HANDLER : No Such File Found..") 
-            self.loseConnection()                  
+            self.transport.loseConnection()                  
 
 class RequestHandlerFactory(protocol.ServerFactory):
     protocol = RequestHandlerProtocol

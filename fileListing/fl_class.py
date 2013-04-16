@@ -42,4 +42,7 @@ class FileListing():
     
     def getPrivMeta(self, file_name):
         return self.meta_priv[file_name]  
+    
+    def getUserName(self):
+        return self.username
         

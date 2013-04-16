@@ -1,6 +1,7 @@
 from twisted.internet import reactor, protocol
 from twisted.protocols import basic
 from fileIndexing import search
+import os
 
 class RequestHandlerProtocol(basic.LineReceiver):
     def connectionMade(self):
@@ -23,6 +24,7 @@ class RequestHandlerProtocol(basic.LineReceiver):
             self.transport.write(desc_file.read())
             self.transport.write('\r\n')
             desc_file.close()
+            os.remove(desc_path)
             self.setLineMode()
             self.sendLine("REQUEST HANDLER : Descriptor Sent")
             self.transport.loseConnection()

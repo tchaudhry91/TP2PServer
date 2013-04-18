@@ -31,7 +31,7 @@ def singleFileSearch(file_name, user):
                         os.getcwd(),'Listings',listing),'rb'))
         file_list = fl_class_obj.getOpenFiles()
         for current_file in file_list:
-            if current_file == file_name and current_file.getUserName() == user:
+            if current_file == file_name and fl_class_obj.getUserName() == user:
                 return (current_file, fl_class_obj.getIp())
         return None
     
